@@ -1,5 +1,6 @@
 package com.davidvardanyan.instagramclone2;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private EditText edtName,edtPunchSpeed,edtPunchPower,edtKickSpeed,edtKickPower;
     private TextView txtGetData;
     private Button btnGetAllData;
+    private Button btnTransition;
     private String allKickboxers;
 
     @Override
@@ -44,6 +46,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         txtGetData = findViewById(R.id.txtGetData);
         btnGetAllData = findViewById(R.id.btnGetAllData);
+        btnTransition = findViewById(R.id.btnNextActivity);
 
         txtGetData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +72,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                     allKickboxers = "" ;
 
                     ParseQuery<ParseObject> queryAll  = ParseQuery.getQuery("kickboxer");
+                   // queryAll.whereGreaterThan("punchPower",20000);
+                    queryAll.whereGreaterThanOrEqualTo("punchPower",20000);
                     queryAll.findInBackground(new FindCallback<ParseObject>() {
                         @Override
                         public void done(List<ParseObject> objects, ParseException e) {
@@ -89,6 +94,16 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
                         }
                     });
+                }
+            });
+
+
+
+            btnTransition.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(SignUp.this,SignUpLoginActivity.class);
+                    startActivity(intent);
                 }
             });
     }
