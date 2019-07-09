@@ -1,5 +1,6 @@
 package com.davidvardanyan.instagramclone2;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -75,6 +76,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         FancyToast.makeText(LoginActivity.this, user.getUsername() +
                                                         " is logged in successfully", Toast.LENGTH_SHORT,
                                                 FancyToast.SUCCESS, true).show();
+
+                                        transitionToSocialMediaActivity();
+                                    }else {
+                                        FancyToast.makeText(LoginActivity.this,
+                                                        "Wrong Email or Password", Toast.LENGTH_SHORT,
+                                                FancyToast.INFO, true).show();
                                     }
                                 }
                             });
@@ -98,5 +105,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
+    }
+
+    private void transitionToSocialMediaActivity(){
+
+        Intent intent = new Intent(LoginActivity.this,SocialMediaActivity.class);
+        startActivity(intent);
     }
 }
