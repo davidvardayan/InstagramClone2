@@ -2,7 +2,9 @@ package com.davidvardanyan.instagramclone2;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,6 +29,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         edtLoginEmail = findViewById(R.id.edtLoginEmail);
         edtLoginPassword = findViewById(R.id.edtLoginPassword);
 
+        edtLoginPassword.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN){
+                    onClick(btnLoginActivity);
+                }
+                return false;
+            }
+        });
+
         btnLoginActivity = findViewById(R.id.btnLoginActivity);
         btnSignUpLoginActivity = findViewById(R.id.btnSignUpLoginActivity);
 
@@ -45,23 +57,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()){
             case R.id.btnLoginActivity:
 
-                ParseUser.logInInBackground(edtLoginEmail.getText().toString(),
-                        edtLoginPassword.getText().toString(),
-                        new LogInCallback() {
-                    @Override
-                    public void done(ParseUser user, ParseException e) {
+                if (edtLoginEmail.getText().toString().equals("")
+                        ||  edtLoginPassword.getText().toString().equals("")){
 
-                        if (user != null && e == null){
-                            FancyToast.makeText(LoginActivity.this,user.getUsername() +
-                                            " is logged in successfully", Toast.LENGTH_SHORT,
-                                    FancyToast.SUCCESS,true).show();
-                        }
-                    }
-                });
+                    FancyToast.makeText(LoginActivity.this,
+                            "Email and Password are required", Toast.LENGTH_SHORT,
+                            FancyToast.INFO,true).show();
+                }else {
+
+                    ParseUser.logInInBackground(edtLoginEmail.getText().toString(),
+                            edtLoginPassword.getText().toString(),
+                            new LogInCallback() {
+                                @Override
+                                public void done(ParseUser user, ParseException e) {
+
+                                    if (user != null && e == null) {
+                                        FancyToast.makeText(LoginActivity.this, user.getUsername() +
+                                                        " is logged in successfully", Toast.LENGTH_SHORT,
+                                                FancyToast.SUCCESS, true).show();
+                                    }
+                                }
+                            });
+
+                }
 
                 break;
             case  R.id.btnSignUpLoginActivity:
                 break;
         }
+    }
+
+    public void root2LayoutTapped(View view){
+
+        try {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
     }
 }
